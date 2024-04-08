@@ -16,6 +16,6 @@ jobs:
           node-version: "20"
       - name: Install dependencies and build
         run: |
-          docker build -t Dockerfile.frontend .
-          docker run -d --name Dockerfile.frontend -p 80:80 Dockerfile.frontend
+          docker build -t dockerfile.frontend .
+          docker run -d --name dockerfile.frontend -p 80:80 dockerfile.frontend
         working-directory: .
