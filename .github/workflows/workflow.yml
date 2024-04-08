@@ -1,0 +1,21 @@
+name: Frontend_Scan
+
+on:
+  workflow_dispatch:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Frontend host
+    runs-on: self-hosted
+    steps:
+      - name: Node version setup
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install dependencies and build
+        run: |
+          docker build -t frontendimg .
+          docker run -d --name frontend -p 80:80 frontendimg
+        working-directory: ./frontend
