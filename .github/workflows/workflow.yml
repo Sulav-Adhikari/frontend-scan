@@ -17,5 +17,5 @@ jobs:
       - name: Install dependencies and build
         run: |
           docker build -t frontendimg .
-          docker run -d --name frontend -p 80:80 frontendimg
+          docker run -d --name Dockerfile.frontend -p 80:80 frontendimg
         working-directory: ./frontend
