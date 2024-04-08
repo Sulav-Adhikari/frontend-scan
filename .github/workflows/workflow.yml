@@ -16,6 +16,6 @@ jobs:
           node-version: "20"
       - name: Install dependencies and build
         run: |
-          docker build -t frontendimg .
+          docker build -t Dockerfile.frontend .
           docker run -d --name Dockerfile.frontend -p 80:80 frontendimg
         working-directory: ./frontend
