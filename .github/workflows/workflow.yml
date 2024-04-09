@@ -1,23 +1,48 @@
-name: Frontend
+name: Build and Deploy
 
 on:
-  workflow_dispatch:
+  push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
-    name: Frontend host
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
+
+    env:
+        PROJECT_DIR: '/home/runner/work/frontend/frontend'
+
     steps:
-      - name: Node version setup
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: Install dependencies and build
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
         run: |
-          docker build -t frontend_image .
-          docker run -d --name frontend_container -p 80:80 frontend_image
-        working-directory: /
+          yarn install
+          yarn build
+        working-directory: ${{ env.PROJECT_DIR }}
 
+      - name: Install Snyk CLI
+        run: yarn global add snyk
 
+      - name: Snyk code test
+        run: |
+            snyk test ${{ env.PROJECT_DIR }} || true
+            snyk auth ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
+
+      - name: Snyk code monitoring
+        run: |
+            snyk monitor ${{ env.PROJECT_DIR }} || true
+            snyk auth ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
+
+      - name: Get Snyk report
+        run: |
+          snyk test --json ${{ env.PROJECT_DIR }} > snyk_report.json
+          cat snyk_report.json
+        continue-on-error: true
+        if: always()
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
