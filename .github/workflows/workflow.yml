@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-        PROJECT_DIR: '/home/runner/work/frontend/frontend'
+        PROJECT_DIR: '/home/runner/work/frontend-scan/frontend-scan'
 
     steps:
       - name: Checkout
