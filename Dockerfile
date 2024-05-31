@@ -11,7 +11,7 @@ COPY . .
 
 RUN yarn build
 # For production
-FROM nginx:1.25.4 as PROD_IMAGE
+FROM nginx:1.26.1 as PROD_IMAGE
 
 WORKDIR /usr/share/nginx/html
 
